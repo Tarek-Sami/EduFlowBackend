@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.env
+
+# Django
+db.sqlite3
+staticfiles/
+media/
+
+# Migrations cache
+*.log
+
+# VS Code
+.vscode/
+
+# JetBrains (PyCharm / CLion / IntelliJ)
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
