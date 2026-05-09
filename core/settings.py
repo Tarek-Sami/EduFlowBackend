@@ -23,6 +23,10 @@ ALLOWED_HOSTS = [
     "localhost",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://eduflowbackend-production.up.railway.app",
+]
+
 
 # Application definition
 
