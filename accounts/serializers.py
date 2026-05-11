@@ -1,8 +1,35 @@
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
+from .models import User
+
+UserModel = get_user_model()
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "email",
+            "password",
+            "role",
+            "department",
+            "phone",
+            "gender",
+        ]
+
+    def create(self, validated_data):
+        password = validated_data.pop("password")
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
 
 class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -13,8 +40,8 @@ class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
         password = attrs.get("password")
 
         try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
+            user = UserModel.objects.get(email=email)
+        except UserModel.DoesNotExist:
             raise AuthenticationFailed("Invalid email or password")
 
         if not user.check_password(password):
@@ -23,19 +50,23 @@ class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
         if not user.is_active:
             raise AuthenticationFailed("User account is disabled")
 
-        # Generate JWT tokens
         refresh = self.get_token(user)
 
         return {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
-            "user": {
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-                "role": user.role,
-                "department": user.department,
-                "phone": user.phone,
-                "gender": user.gender,
-            },
         }
+
+
+class CurrentUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "email",
+            "role",
+            "department",
+            "phone",
+            "gender",
+        ]
