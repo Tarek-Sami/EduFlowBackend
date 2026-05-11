@@ -13,6 +13,9 @@ class User(AbstractUser):
         ("female", "Female"),
     ]
 
+  
+    email = models.EmailField(unique=True)
+
     role = models.CharField(
         max_length=20,
         choices=ROLE_CHOICES,
@@ -25,10 +28,12 @@ class User(AbstractUser):
         null=True,
     )
 
+
     phone = models.CharField(
         max_length=20,
         blank=True,
         null=True,
+        unique=True,
     )
 
     gender = models.CharField(
@@ -38,5 +43,16 @@ class User(AbstractUser):
         null=True,
     )
 
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
+  
+    first_name = models.CharField(
+        max_length=30,
+        blank=True,
+    )
+
+    last_name = models.CharField(
+        max_length=30,
+        blank=True,
+    )
+
+    def __str__(self):
+        return self.email

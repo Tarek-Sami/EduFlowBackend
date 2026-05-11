@@ -22,6 +22,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             "department",
             "phone",
             "gender",
+            "first_name",
+            "last_name",
         ]
 
     def create(self, validated_data):
@@ -69,4 +71,6 @@ class CurrentUserSerializer(serializers.ModelSerializer):
             "department",
             "phone",
             "gender",
+            "first_name",
+            "last_name",
         ]
