@@ -1,26 +1,41 @@
-from rest_framework import serializers
-from .models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.exceptions import AuthenticationFailed
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
-class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = "email"
 
-    class Meta:
-        model = User
-        fields = [
-            "id",
-            "username",
-            "email",
-            "password",
-            "role",
-            "department",
-            "phone",
-            "gender",
-        ]
+    def validate(self, attrs):
+        email = attrs.get("email")
+        password = attrs.get("password")
 
-    def create(self, validated_data):
-        password = validated_data.pop("password")
-        user = User(**validated_data)
-        user.set_password(password)   # تشفير الباسورد
-        user.save()
-        return user
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise AuthenticationFailed("Invalid email or password")
+
+        if not user.check_password(password):
+            raise AuthenticationFailed("Invalid email or password")
+
+        if not user.is_active:
+            raise AuthenticationFailed("User account is disabled")
+
+        # Generate JWT tokens
+        refresh = self.get_token(user)
+
+        return {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+            "user": {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "role": user.role,
+                "department": user.department,
+                "phone": user.phone,
+                "gender": user.gender,
+            },
+        }
