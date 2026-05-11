@@ -1,3 +1,5 @@
+# core/urls.py
+
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
@@ -8,6 +10,7 @@ from accounts.views import (
     RegisterView,
     EmailTokenObtainPairView,
     CurrentUserView,
+    UserListView,
 )
 
 router = routers.DefaultRouter()
@@ -21,4 +24,7 @@ urlpatterns = [
     path("api/token/", EmailTokenObtainPairView.as_view()),
     path("api/token/refresh/", TokenRefreshView.as_view()),
     path("api/me/", CurrentUserView.as_view()),
+
+    # Get all users
+    path("api/users/", UserListView.as_view()),
 ]
