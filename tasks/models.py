@@ -42,7 +42,12 @@ class Task(models.Model):
     deadline = models.DateField()
 
     created_at = models.DateTimeField(auto_now_add=True)
-    assigned_to = models.CharField(max_length=100)
+    assigned_to = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+)
     progress = models.IntegerField(default=0)
 
     def __str__(self):
