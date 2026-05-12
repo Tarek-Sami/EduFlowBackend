@@ -1,0 +1,6 @@
+# Railway / Nixpacks: default Python build installs deps, but does not run collectstatic.
+# Without this, STATIC_ROOT stays empty and admin/Jazzmin load with no CSS (plain HTML).
+
+[phases.build]
+dependsOn = ["install"]
+cmds = ["python manage.py collectstatic --noinput"]
