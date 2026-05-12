@@ -14,7 +14,7 @@ from .serializers import (
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
-
+    permission_classes = [AllowAny]
 
 class EmailTokenObtainPairView(TokenObtainPairView):
     serializer_class = EmailTokenObtainPairSerializer
@@ -45,3 +45,6 @@ class UserListView(generics.ListAPIView):
     queryset = User.objects.all().order_by("id")
     serializer_class = CurrentUserSerializer
     permission_classes = [IsAuthenticated]
+
+
+    
