@@ -11,8 +11,10 @@ class TaskAdmin(admin.ModelAdmin):
         "status",
         "progress",
         "made_by",
+        "assigned_to",
         "deadline",
+        "created_at",
     )
     list_filter = ("status", "priority", "deadline")
-    search_fields = ("headline", "description", "made_by")
+    search_fields = ("headline", "description", "made_by", "assigned_to")
     ordering = ("-created_at",)

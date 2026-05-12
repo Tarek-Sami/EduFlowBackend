@@ -42,6 +42,8 @@ class Task(models.Model):
     deadline = models.DateField()
 
     created_at = models.DateTimeField(auto_now_add=True)
+    assigned_to = models.CharField(max_length=100)
+    progress = models.IntegerField(default=0)
 
     def __str__(self):
         return self.headline
