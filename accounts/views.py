@@ -10,6 +10,7 @@ from .serializers import (
     EmailTokenObtainPairSerializer,
     CurrentUserSerializer,
 )
+from rest_framework.permissions import AllowAny
 
 
 class RegisterView(generics.CreateAPIView):
