@@ -27,11 +27,20 @@ class CurrentUserView(APIView):
         serializer = CurrentUserSerializer(request.user)
         return Response(serializer.data)
 
+    def patch(self, request):
+        serializer = CurrentUserSerializer(
+            request.user,
+            data=request.data,
+            partial=True,
+        )
 
-# GET /api/users/
-# Returns all users in the accounts table.
-# Currently accessible to any authenticated user.
-# (You can later restrict this to admins only.)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=400)
+
+
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all().order_by("id")
     serializer_class = CurrentUserSerializer
