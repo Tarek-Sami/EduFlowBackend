@@ -48,7 +48,6 @@ class Task(models.Model):
     null=True,
     blank=True,
 )
-    progress = models.IntegerField(default=0)
     title = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
